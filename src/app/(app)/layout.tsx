@@ -47,6 +47,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Auto-close mobile sidebar when navigating
   useEffect(() => {
@@ -55,6 +56,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   // Initial theme check and mount
   useEffect(() => {
+    setMounted(true);
     const isDark = document.documentElement.classList.contains('dark') || 
                    (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
     setIsDarkMode(isDark);
@@ -77,6 +79,14 @@ function AppContent({ children }: { children: React.ReactNode }) {
     toast({ title: "已注销", description: "您已成功退出登录。" });
     router.push("/login");
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
