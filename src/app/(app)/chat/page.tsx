@@ -616,11 +616,11 @@ export default function ChatPage() {
                                 <DropdownMenuTrigger asChild>
                                     <Button 
                                         variant="outline" size="sm"
-                                        className="h-7 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all px-2.5 sm:px-4 shrink-0 focus-visible:ring-0"
+                                        className="h-7 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all px-2 sm:px-4 shrink-0 focus-visible:ring-0"
                                     >
-                                        <MessagesSquare className="size-3 lg:size-3.5 mr-1.5 opacity-50 shrink-0" />
-                                        <span className="max-w-[75px] sm:max-w-[120px] truncate">{activeSessionData.displayName || activeSessionData.label || activeSession}</span>
-                                        <ChevronDown className={cn("size-3 ml-1.5 opacity-30 shrink-0 transition-transform", showSessionMenu && "rotate-180")} />
+                                        <MessagesSquare className="size-3 lg:size-3.5 mr-1 sm:mr-1.5 opacity-50 shrink-0" />
+                                        <span className="max-w-[48px] sm:max-w-[120px] truncate">{activeSessionData.displayName || activeSessionData.label || activeSession}</span>
+                                        <ChevronDown className={cn("size-3 ml-1 sm:ml-1.5 opacity-30 shrink-0 transition-transform", showSessionMenu && "rotate-180")} />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" side="top" sideOffset={12} className="w-72 p-2 border-border/50 bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-2 duration-200">
@@ -684,11 +684,11 @@ export default function ChatPage() {
                                 <DropdownMenuTrigger asChild>
                                     <Button 
                                         variant="outline" size="sm" 
-                                        className="h-7 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 sm:px-4 hover:text-foreground transition-all shrink-0 focus-visible:ring-0"
+                                        className="h-7 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 sm:px-4 hover:text-foreground transition-all shrink-0 focus-visible:ring-0"
                                     >
-                                        <Brain className="size-3 lg:size-3.5 mr-1.5 opacity-50 shrink-0" />
-                                        <span className="max-w-[85px] sm:max-w-[160px] truncate">{selectedModel || "Default"}</span> 
-                                        <ChevronDown className="size-3 ml-1.5 opacity-30 shrink-0" />
+                                        <Brain className="size-3 lg:size-3.5 mr-1 sm:mr-1.5 opacity-50 shrink-0" />
+                                        <span className="max-w-[60px] sm:max-w-[160px] truncate">{selectedModel || "Default"}</span> 
+                                        <ChevronDown className="size-3 ml-1 sm:ml-1.5 opacity-30 shrink-0" />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" side="top" sideOffset={12} className="w-64 p-2 border-border/50 bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-2 duration-200">
