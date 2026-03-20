@@ -639,6 +639,7 @@ export default function ChatPage() {
                                           });
                                           // Generate consistent color from agentId
                                           const getAgentColor = (agentId: string) => {
+                                            if (agentId === "main") return "hsl(199, 89%, 48%)"; // Sky Blue for main
                                             const hash = agentId.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
                                             const hue = hash % 360;
                                             return `hsl(${hue}, 65%, 50%)`;
