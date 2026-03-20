@@ -62,6 +62,18 @@
 
 ## 🚀 快速开始
 
+### 📥 获取代码 (Get Code)
+
+在开始之前，请先将项目克隆到本地：
+
+```bash
+# 克隆仓库
+git clone https://github.com/azhumide/openclaw-new-ui.git
+
+# 进入项目目录
+cd openclaw-new-ui
+```
+
 ### 方式一：本地开发 (Local Development)
 
 确保已安装 Node.js 20+ 环境：
