@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { 
   Settings, Save, Play, RefreshCw, Search, 
   Code, Layout, FileJson, AlertCircle, CheckCircle2,
-  ChevronRight, Globe, Shield, MessageSquare, Zap, Cpu,
+  ChevronRight, ChevronLeft, Globe, Shield, MessageSquare, Zap, Cpu,
   Database, Bell, Terminal, Palette, Layers, Box
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -134,24 +134,24 @@ export default function ConfigPage() {
   const renderField = (label: string, path: string, type: "string" | "number" | "boolean", description?: string) => {
     const value = path.split(".").reduce((o, i) => o?.[i], configObj);
     return (
-      <div className="group space-y-2 p-3 rounded-xl border border-transparent hover:border-border/50 hover:bg-muted/30 transition-all">
+      <div className="group space-y-1.5 sm:space-y-2 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-transparent hover:border-border/50 hover:bg-muted/30 transition-all">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold">{label}</label>
+          <label className="text-[11px] sm:text-sm font-semibold">{label}</label>
           {type === "boolean" ? (
             <Switch 
               checked={!!value} 
               onCheckedChange={(v) => handleFormUpdate(path, v)}
-              className="scale-90"
+              className="scale-75 sm:scale-90"
             />
           ) : null}
         </div>
-        {description && <p className="text-[11px] text-muted-foreground leading-relaxed">{description}</p>}
+        {description && <p className="hidden sm:block text-[11px] text-muted-foreground leading-relaxed">{description}</p>}
         {type !== "boolean" && (
           <Input 
             value={value ?? ""} 
             type={type === "number" ? "number" : "text"}
             onChange={(e) => handleFormUpdate(path, type === "number" ? Number(e.target.value) : e.target.value)}
-            className="h-9 bg-background/50 border-border/50 focus:border-primary/30"
+            className="h-8 sm:h-9 text-xs sm:text-sm bg-background/50 border-border/50 focus:border-primary/30"
           />
         )}
       </div>
@@ -159,84 +159,96 @@ export default function ConfigPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col animate-in fade-in duration-500">
+    <div className="h-[calc(100vh-4rem)] flex flex-col animate-in fade-in duration-500 overflow-hidden">
       {/* Top Header */}
-      <div className="px-8 py-4 border-b bg-background/50 backdrop-blur-xl flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-4">
-          <div className="p-2 bg-primary/10 rounded-xl">
-            <Settings className="size-5 text-primary" />
+      <div className="px-2 sm:px-8 py-1.5 sm:py-4 border-b bg-background/50 backdrop-blur-xl flex items-center justify-between gap-1.5 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-4 min-w-0">
+          {activeSection && (
+            <Button variant="ghost" size="icon" className="md:hidden h-8 w-8 -ml-1 text-muted-foreground" onClick={() => setActiveSection("")}>
+              <ChevronLeft className="size-4" />
+            </Button>
+          )}
+          <div className="p-1 sm:p-2 bg-primary/10 rounded-lg sm:rounded-xl shrink-0">
+            <Settings className="size-3.5 sm:size-5 text-primary" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold">全局配置 (Config)</h1>
-            <p className="text-xs text-muted-foreground">管理 OpenClaw 核心运行参数及多维度元数据。</p>
-          </div>
+          <h1 className="text-xs sm:text-xl font-bold truncate">配置</h1>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex bg-muted/40 p-1 rounded-xl border mr-4">
+
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex bg-muted/40 p-0.5 rounded-lg border">
             <button 
               onClick={() => setMode("form")}
-              className={cn("px-4 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2", mode === "form" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+              className={cn("px-1.5 sm:px-4 py-1 text-[10px] sm:text-xs font-medium rounded-md transition-all flex items-center gap-1", mode === "form" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
             >
-              <Layout className="size-3.5" /> 可视化
+              <Layout className="size-3" /> <span className="hidden sm:inline">可视</span>
             </button>
             <button 
               onClick={() => setMode("raw")}
-              className={cn("px-4 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center gap-2", mode === "raw" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+              className={cn("px-1.5 sm:px-4 py-1 text-[10px] sm:text-xs font-medium rounded-md transition-all flex items-center gap-1", mode === "raw" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
             >
-              <Code className="size-3.5" /> 源码
+              <Code className="size-3" /> <span className="hidden sm:inline">源码</span>
             </button>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchData} disabled={loading} className="rounded-xl border-border/50">
-            <RefreshCw className={cn("size-3.5 mr-2", loading && "animate-spin")} /> 重载
-          </Button>
-          <Button 
-            size="sm" 
-            disabled={!isDirty || saving} 
-            onClick={handleSave}
-            className="rounded-xl bg-orange-600 hover:bg-orange-700 text-white"
-          >
-            <Save className="size-3.5 mr-2" /> 保存
-          </Button>
-          <Button 
-            size="sm" 
-            disabled={!isDirty || applying} 
-            onClick={handleApply}
-            className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white"
-          >
-            <Play className="size-3.5 mr-2" /> 应用并启动
-          </Button>
+          
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            <Button variant="outline" size="icon" onClick={fetchData} disabled={loading} className="h-7 w-7 sm:h-9 sm:w-auto sm:px-3 rounded-lg sm:rounded-xl border-border/50">
+              <RefreshCw className={cn("size-3 sm:size-3.5", loading && "animate-spin")} />
+              <span className="hidden sm:inline ml-2">重载</span>
+            </Button>
+            <Button 
+              size="icon" 
+              disabled={!isDirty || saving} 
+              onClick={handleSave}
+              className="h-7 w-7 sm:h-9 sm:w-auto sm:px-3 rounded-lg sm:rounded-xl bg-orange-600 hover:bg-orange-700 text-white"
+            >
+              <Save className="size-3 sm:size-3.5" />
+              <span className="hidden sm:inline ml-2">保存</span>
+            </Button>
+            <Button 
+              size="icon" 
+              disabled={!isDirty || applying} 
+              onClick={handleApply}
+              className="h-7 w-7 sm:h-9 sm:w-auto sm:px-3 rounded-lg sm:rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              <Play className="size-3 sm:size-3.5" />
+              <span className="hidden sm:inline ml-2">应用</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
-        <div className="w-72 border-r bg-muted/10 overflow-y-auto p-4 space-y-1">
+        <div className={cn(
+          "w-full md:w-72 border-r bg-muted/10 overflow-y-auto p-2 sm:p-4 space-y-1 shrink-0",
+          activeSection && "hidden md:block"
+        )}>
           {SECTIONS.map(s => (
             <button
               key={s.id}
               onClick={() => setActiveSection(s.id)}
               className={cn(
-                "w-full flex items-start gap-3 p-3 rounded-2xl transition-all group relative overflow-hidden",
+                "w-full flex items-center md:items-start gap-2.5 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-2xl transition-all group relative overflow-hidden",
                 activeSection === s.id 
                   ? "bg-primary/10 text-primary border border-primary/20" 
                   : "hover:bg-muted/50 border border-transparent text-muted-foreground hover:text-foreground"
               )}
             >
-              <s.icon className={cn("size-5 mt-0.5", activeSection === s.id ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground")} />
-              <div className="text-left">
-                <p className="text-sm font-bold">{s.label}</p>
-                <p className="text-[10px] opacity-70 leading-tight mt-0.5 line-clamp-1">{s.desc}</p>
+              <s.icon className={cn("size-4 sm:size-5", activeSection === s.id ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground")} />
+              <div className="text-left min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-bold truncate">{s.label}</p>
+                <p className="hidden sm:block text-[10px] opacity-70 leading-tight mt-0.5 line-clamp-1">{s.desc}</p>
               </div>
-              {activeSection === s.id && <div className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-primary rounded-full" />}
+              <ChevronRight className="md:hidden size-3 text-muted-foreground/40" />
             </button>
           ))}
-          <div className="pt-8 px-4">
-            <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-2">
-              <div className="flex items-center gap-2 text-[10px] font-bold text-amber-500 uppercase">
-                <AlertCircle className="size-3" /> 注意事项
+          <div className="pt-4 sm:pt-8 px-2 sm:px-4">
+            <div className="p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-amber-500/5 border border-amber-500/10 space-y-1.5 sm:space-y-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] font-bold text-amber-500 uppercase">
+                <AlertCircle className="size-2.5 sm:size-3" /> 注意事项
               </div>
-              <p className="text-[10px] text-muted-foreground leading-relaxed">
-                部分配置更改（如监听端口）可能需要系统完全重启。建议优先使用"应用并启动"进行热更新。
+              <p className="text-[9px] sm:text-[10px] text-muted-foreground leading-relaxed">
+                部分配置可能需要系统重新加载。
               </p>
             </div>
           </div>
@@ -245,7 +257,7 @@ export default function ConfigPage() {
         {/* Main Editor Area */}
         <div className="flex-1 overflow-hidden bg-background">
           {mode === "raw" ? (
-            <div className="h-full relative font-mono text-sm group">
+            <div className="h-full relative font-mono text-xs group">
               <Editor
                 height="100%"
                 defaultLanguage="json"
@@ -253,40 +265,46 @@ export default function ConfigPage() {
                 theme="vs-dark"
                 onChange={(v) => setRawConfig(v || "")}
                 options={{
-                    fontSize: 14,
+                    fontSize: 11,
+                    lineHeight: 1.6,
                     fontFamily: "'Fira Code', 'Monaco', monospace",
-                    padding: { top: 32 },
+                    padding: { top: 8 },
                     lineNumbers: "on",
                     roundedSelection: true,
                     scrollBeyondLastLine: false,
                     readOnly: false,
                     cursorStyle: "line",
                     automaticLayout: true,
-                    minimap: { enabled: true },
+                    minimap: { enabled: false },
                     bracketPairColorization: { enabled: true },
                     smoothScrolling: true,
                     cursorBlinking: "smooth",
                     renderLineHighlight: "all",
+                    tabSize: 2,
+                    folding: true,
                 }}
               />
-              <div className="absolute top-4 right-10 flex items-center gap-2 z-10">
-                <Badge variant="outline" className="bg-background/80 backdrop-blur border-primary/20 text-primary">JSON EDITOR</Badge>
-                {isDirty && <Badge variant="warning">未保存更改</Badge>}
+              <div className="absolute top-2 right-4 flex items-center gap-1 z-10 scale-[0.6] origin-right opacity-50 hover:opacity-100 transition-opacity">
+                <Badge variant="outline" className="bg-background/80 backdrop-blur border-primary/20 text-primary uppercase">JSON</Badge>
+                {isDirty && <Badge variant="warning">Dirty</Badge>}
               </div>
             </div>
           ) : (
-            <div className="h-full overflow-y-auto p-12 space-y-12 max-w-4xl">
+            <div className={cn(
+              "h-full overflow-y-auto p-4 sm:p-12 space-y-6 sm:space-y-12 max-w-4xl",
+              !activeSection && "hidden md:block"
+            )}>
               <div className="animate-in slide-in-from-bottom-4 duration-500">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="p-3 bg-primary/10 rounded-2xl">
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-8">
+                  <div className="p-2 sm:p-3 bg-primary/10 rounded-xl sm:rounded-2xl">
                     {(() => {
                       const Icon = SECTIONS.find(s => s.id === activeSection)?.icon || Box;
-                      return <Icon className="size-6 text-primary" />;
+                      return <Icon className="size-4 sm:size-6 text-primary" />;
                     })()}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold">{SECTIONS.find(s => s.id === activeSection)?.label}</h2>
-                    <p className="text-muted-foreground">{SECTIONS.find(s => s.id === activeSection)?.desc}</p>
+                    <h2 className="text-sm sm:text-2xl font-bold">{SECTIONS.find(s => s.id === activeSection)?.label}</h2>
+                    <p className="hidden sm:block text-muted-foreground">{SECTIONS.find(s => s.id === activeSection)?.desc}</p>
                   </div>
                 </div>
 
@@ -335,13 +353,13 @@ export default function ConfigPage() {
                   )}
                 </div>
 
-                <div className="mt-12 p-8 rounded-3xl border border-dashed border-border/50 flex flex-col items-center text-center space-y-4 opacity-40 hover:opacity-100 transition-opacity">
-                  <FileJson className="size-8 text-muted-foreground stroke-1" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">需要配置更深层的参数？</p>
-                    <p className="text-xs text-muted-foreground italic">表单仅展示常用项，您可以切换到"源码模式"解锁 100% 的配置权限。</p>
+                <div className="mt-8 sm:mt-12 p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-dashed border-border/50 flex flex-col items-center text-center space-y-2 sm:space-y-4 opacity-40 hover:opacity-100 transition-opacity">
+                  <FileJson className="size-6 sm:size-8 text-muted-foreground stroke-1" />
+                  <div className="space-y-0.5 sm:space-y-1">
+                    <p className="text-xs sm:text-sm font-medium">配置深层参数？</p>
+                    <p className="hidden sm:block text-xs text-muted-foreground italic">表单仅展示常用项。</p>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => setMode("raw")} className="rounded-xl">
+                  <Button variant="outline" size="sm" onClick={() => setMode("raw")} className="h-7 sm:h-9 text-[10px] sm:text-xs rounded-lg sm:rounded-xl px-4">
                     进入源码编辑
                   </Button>
                 </div>

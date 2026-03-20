@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RefreshCw, Play, Clock, Settings, FileText, CheckCircle2, XCircle, AlertCircle, CalendarClock, Zap, Power, Activity } from "lucide-react";
+import { RefreshCw, Play, Clock, Settings, FileText, CheckCircle2, XCircle, AlertCircle, CalendarClock, Zap, Power, Activity, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 
@@ -114,49 +114,49 @@ export default function TasksPage() {
   return (
     <div className="flex flex-col h-full overflow-hidden animate-in fade-in duration-300">
       {/* Top Banner */}
-      <div className="p-6 shrink-0 border-b border-border/50 bg-background/50">
+      <div className={cn("p-3 sm:p-6 shrink-0 border-b border-border/50 bg-background/50", selectedJobId && "hidden md:block")}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">定时任务 (CronJobs)</h1>
-            <p className="text-muted-foreground mt-1">管理自动化工作流，调度 AI 助手定时运行的预配置作业。</p>
+          <div className="flex flex-col gap-0.5">
+            <h1 className="text-base sm:text-3xl font-bold tracking-tight">定时任务 (CronJobs)</h1>
+            <p className="hidden sm:block text-sm text-muted-foreground mt-1">管理自动化工作流，调度 AI 助手定时运行的预配置作业。</p>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchData} disabled={loading} className="gap-2">
-            <RefreshCw className={cn("size-4", loading && "animate-spin")} />
-            刷新状态
+          <Button variant="outline" size="sm" onClick={fetchData} disabled={loading} className="gap-1.5 sm:gap-2 h-7 sm:h-9 px-2 sm:px-3">
+            <RefreshCw className={cn("size-3 sm:size-4", loading && "animate-spin")} />
+            <span className="text-[10px] sm:text-sm">刷新</span>
           </Button>
         </div>
 
-        <div className="max-w-7xl mx-auto mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-           <Card className="p-4 flex items-center gap-4 bg-muted/20 border-border/50 relative overflow-hidden">
-             <div className="p-3 bg-primary/10 rounded-full text-primary">
-               <Power className="size-5" />
+        <div className="max-w-7xl mx-auto mt-2.5 sm:mt-6 grid grid-cols-3 gap-1.5 sm:gap-4">
+           <Card className="p-1.5 sm:p-4 flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-4 bg-muted/20 border-border/50 relative overflow-hidden rounded-xl">
+             <div className="p-1 sm:p-3 bg-primary/10 rounded-full text-primary shrink-0">
+               <Power className="size-3 sm:size-5" />
              </div>
-             <div>
-               <p className="text-sm font-medium text-muted-foreground">全局 Cron 引擎</p>
-               <p className="text-xl font-bold tracking-tight">
-                 {status?.enabled ? <span className="text-green-500">运行中 (Enabled)</span> : <span className="text-red-500">已停用 (Disabled)</span>}
+             <div className="text-center sm:text-left min-w-0 w-full overflow-hidden">
+               <p className="text-[8px] sm:text-sm font-medium text-muted-foreground truncate uppercase tracking-tighter">引擎</p>
+               <p className="text-[9px] sm:text-xl font-bold tracking-tight truncate">
+                 {status?.enabled ? <span className="text-green-500">运行</span> : <span className="text-red-500">停用</span>}
                </p>
              </div>
            </Card>
            
-           <Card className="p-4 flex items-center gap-4 bg-muted/20 border-border/50">
-             <div className="p-3 bg-blue-500/10 rounded-full text-blue-500">
-               <Activity className="size-5" />
+           <Card className="p-1.5 sm:p-4 flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-4 bg-muted/20 border-border/50 rounded-xl">
+             <div className="p-1 sm:p-3 bg-blue-500/10 rounded-full text-blue-500 shrink-0">
+               <Activity className="size-3 sm:size-5" />
              </div>
-             <div>
-               <p className="text-sm font-medium text-muted-foreground">挂载任务总数</p>
-               <p className="text-xl font-bold tracking-tight">{status?.jobs ?? 0}</p>
+             <div className="text-center sm:text-left min-w-0 w-full overflow-hidden">
+               <p className="text-[8px] sm:text-sm font-medium text-muted-foreground truncate uppercase tracking-tighter">任务</p>
+               <p className="text-[9px] sm:text-xl font-bold tracking-tight">{status?.jobs ?? 0}</p>
              </div>
            </Card>
 
-           <Card className="p-4 flex items-center gap-4 bg-muted/20 border-border/50">
-             <div className="p-3 bg-orange-500/10 rounded-full text-orange-500">
-               <Clock className="size-5" />
+           <Card className="p-1.5 sm:p-4 flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-4 bg-muted/20 border-border/50 rounded-xl">
+             <div className="p-1 sm:p-3 bg-orange-500/10 rounded-full text-orange-500 shrink-0">
+               <Clock className="size-3 sm:size-5" />
              </div>
-             <div>
-               <p className="text-sm font-medium text-muted-foreground">引擎下一次唤醒</p>
-               <p className="text-xl font-bold tracking-tight">
-                 {status?.nextWakeAtMs ? formatRelativeTime(status.nextWakeAtMs) : "暂无调度"}
+             <div className="text-center sm:text-left min-w-0 w-full overflow-hidden">
+               <p className="text-[8px] sm:text-sm font-medium text-muted-foreground truncate uppercase tracking-tighter">唤醒</p>
+               <p className="text-[9px] sm:text-xl font-bold tracking-tight truncate">
+                 {status?.nextWakeAtMs ? formatRelativeTime(status.nextWakeAtMs).replace("小时后", "h后").replace("分钟后", "m后") : "无"}
                </p>
              </div>
            </Card>
@@ -164,10 +164,13 @@ export default function TasksPage() {
       </div>
 
       {/* Main Workspace Split Pane */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         
         {/* Left Pane - Job List */}
-        <div className="w-1/3 min-w-[320px] max-w-[400px] border-r border-border/50 p-4 flex flex-col gap-4 overflow-y-auto custom-scrollbar bg-background/30">
+        <div className={cn(
+            "w-full md:w-1/3 md:min-w-[320px] md:max-w-[400px] border-r border-border/50 p-3 sm:p-4 flex flex-col gap-3 sm:gap-4 overflow-y-auto custom-scrollbar bg-background/30 md:max-h-full flex-1",
+            selectedJobId && "hidden md:flex"
+        )}>
           <div className="flex items-center justify-between px-2">
             <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">作业列表 ({jobs.length})</h2>
             <Button variant="ghost" size="sm" className="h-8 text-xs text-primary hover:text-primary">
@@ -179,22 +182,22 @@ export default function TasksPage() {
              {jobs.length === 0 && !loading && (
                 <div className="p-4 text-center text-sm text-muted-foreground border border-dashed rounded-lg border-border/50">无工作流，请新建作业</div>
              )}
-             {jobs.map(job => (
+              {jobs.map(job => (
                 <div 
                   key={job.id} 
                   onClick={() => setSelectedJobId(job.id)}
                   className={cn(
-                    "p-3 rounded-lg border transition-all cursor-pointer hover:bg-muted/50 flex flex-col gap-2",
+                    "p-2.5 sm:p-3 rounded-lg border transition-all cursor-pointer hover:bg-muted/50 flex flex-col gap-1.5 sm:gap-2",
                     selectedJobId === job.id ? "bg-muted/50 border-primary/50 shadow-sm" : "border-transparent bg-transparent"
                   )}
                 >
                   <div className="flex items-center justify-between">
-                     <span className="font-semibold text-sm truncate flex-1 pr-2">{job.name}</span>
+                     <span className="font-semibold text-xs sm:text-sm truncate flex-1 pr-2">{job.name}</span>
                      <Switch 
                        checked={job.enabled} 
-                       onCheckedChange={(checked: boolean) => toggleJob(job, checked)} 
+                       onCheckedChange={(checked: boolean = false) => toggleJob(job, checked)} 
                        onClick={(e: React.MouseEvent) => e.stopPropagation()} 
-                       className="data-[state=checked]:bg-green-500"
+                       className="data-[state=checked]:bg-green-500 scale-75 sm:scale-100"
                      />
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -218,8 +221,16 @@ export default function TasksPage() {
           </div>
         </div>
 
-        {/* Right Pane - Details & Runs */}
-        <div className="flex-1 overflow-y-auto bg-muted/10 p-6 custom-scrollbar">
+        <div className={cn(
+            "flex-1 overflow-y-auto bg-muted/10 p-4 sm:p-6 custom-scrollbar md:min-h-0",
+            !selectedJobId && "hidden md:flex"
+        )}>
+          {selectedJobId && (
+            <Button variant="ghost" size="sm" onClick={() => setSelectedJobId(null)} className="md:hidden mb-6 h-8 text-xs px-1 gap-1 -ml-1 text-muted-foreground font-semibold">
+                <ChevronLeft className="size-4" />
+                返回上一级
+            </Button>
+          )}
           {!selectedJob ? (
             <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-4 opacity-60">
                <CalendarClock className="size-16 stroke-1" />

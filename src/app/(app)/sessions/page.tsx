@@ -51,16 +51,16 @@ export default function SessionsPage() {
   }, {});
 
   return (
-    <main className="p-8 space-y-8 bg-muted/5">
-      <div className="max-w-7xl mx-auto space-y-8 pb-12">
+    <main className="p-4 sm:p-8 space-y-6 sm:space-y-8 bg-muted/5">
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-8 sm:pb-12">
         <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-1">
-                <h1 className="text-3xl font-bold tracking-tight">会话管理</h1>
-                <p className="text-muted-foreground">查看并管理网关跟踪的所有会话上下文。</p>
+            <div className="flex flex-col gap-0.5 sm:gap-1">
+                <h1 className="text-xl sm:text-3xl font-bold tracking-tight">会话管理</h1>
+                <p className="text-[10px] sm:text-sm text-muted-foreground">查看并管理网关跟踪的所有会话上下文。</p>
             </div>
-            <Button variant="outline" size="sm" onClick={loadSessions} disabled={loading} className="rounded-xl gap-2">
-                <RefreshCw className={cn("size-4", loading && "animate-spin")} />
-                刷新列表
+            <Button variant="outline" size="sm" onClick={loadSessions} disabled={loading} className="rounded-xl gap-1.5 sm:gap-2 h-8 sm:h-9">
+                <RefreshCw className={cn("size-3.5 sm:size-4", loading && "animate-spin")} />
+                <span className="text-[10px] sm:text-sm">刷新列表</span>
             </Button>
         </div>
 
@@ -74,12 +74,12 @@ export default function SessionsPage() {
             Object.entries(grouped).map(([agentId, agentSessions]) => {
               const color = getAgentColor(agentId);
               return (
-                <div key={agentId} className="space-y-3">
-                  <div className="flex items-center gap-3 px-2">
-                    <div className="size-3 rounded-full" style={{ backgroundColor: color }} />
-                    <span className="text-sm font-black uppercase tracking-widest" style={{ color }}>{agentId}</span>
-                    <div className="flex-1 h-px bg-border/30" />
-                    <span className="text-xs text-muted-foreground">{agentSessions.length} 个会话</span>
+                <div key={agentId} className="space-y-2 sm:space-y-3">
+                  <div className="flex items-center gap-2 sm:gap-3 px-1 sm:px-2">
+                    <div className="size-2.5 sm:size-3 rounded-full" style={{ backgroundColor: color }} />
+                    <span className="text-[11px] sm:text-sm font-black uppercase tracking-widest" style={{ color }}>{agentId}</span>
+                    <div className="flex-1 h-px bg-border/20 sm:bg-border/30" />
+                    <span className="text-[10px] sm:text-xs text-muted-foreground">{agentSessions.length} 个会话</span>
                   </div>
                   {agentSessions.map((s, i) => (
                     <SessionItem key={i} data={s} color={color} />
@@ -97,40 +97,40 @@ export default function SessionsPage() {
 function SessionItem({ data, color }: { data: any; color: string }) {
   return (
     <Card className="border-border/50 shadow-sm hover:shadow-md transition-all bg-background overflow-hidden" style={{ borderLeftWidth: 3, borderLeftColor: color }}>
-      <div className="flex items-center p-6 gap-6">
-        <div className="size-12 rounded-2xl flex items-center justify-center shrink-0 border border-border/50" style={{ backgroundColor: `${color}10` }}>
-            <Hash className="size-6" style={{ color }} />
+      <div className="flex items-center p-3.5 sm:p-6 gap-3 sm:gap-6">
+        <div className="size-9 sm:size-12 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border border-border/50" style={{ backgroundColor: `${color}10` }}>
+            <Hash className="size-5 sm:size-6" style={{ color }} />
         </div>
 
         <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-1">
-                <span className="font-bold text-lg truncate">{data.label || data.key.split(":").pop()}</span>
-                <div className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ backgroundColor: `${color}15`, color }}>
+            <div className="flex items-center gap-2 sm:gap-3 mb-0.5 sm:mb-1">
+                <span className="font-bold text-sm sm:text-lg truncate">{data.label || data.key.split(":").pop()}</span>
+                <div className="px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider shrink-0" style={{ backgroundColor: `${color}15`, color }}>
                     {data.scope || "global"}
                 </div>
             </div>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1.5 font-mono">
-                    <Clock className="size-3" />
+            <div className="flex items-center gap-2 sm:gap-4 text-[10px] sm:text-xs text-muted-foreground">
+                <div className="flex items-center gap-1 sm:gap-1.5 font-mono">
+                    <Clock className="size-2.5 sm:size-3" />
                     {(() => {
                       const ts = data.updatedAtMs || data.updatedAt || data.createdAt || data.timestamp || 0;
                       const d = new Date(ts);
                       return isNaN(d.getTime()) ? "未知" : d.toLocaleString("zh-CN", { hour12: false });
                     })()}
                 </div>
-                <div className="flex items-center gap-1.5 uppercase font-bold tracking-widest text-[9px]">
-                    <Globe className="size-3" />
+                <div className="flex items-center gap-1 sm:gap-1.5 uppercase font-bold tracking-widest text-[8px] sm:text-[9px]">
+                    <Globe className="size-2.5 sm:size-3" />
                     {data.thinkingLevel || "normal"}
                 </div>
             </div>
         </div>
 
-        <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="rounded-xl">
-                <ExternalLink className="size-4" />
+        <div className="flex items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="icon" className="size-8 sm:size-10 rounded-lg sm:rounded-xl">
+                <ExternalLink className="size-3.5 sm:size-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5">
-                <Trash2 className="size-4" />
+            <Button variant="ghost" size="icon" className="size-8 sm:size-10 rounded-lg sm:rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5">
+                <Trash2 className="size-3.5 sm:size-4" />
             </Button>
         </div>
       </div>

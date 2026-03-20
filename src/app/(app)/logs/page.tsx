@@ -158,55 +158,59 @@ export default function LogsPage() {
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col animate-in fade-in duration-500 overflow-hidden">
       {/* Search & Statistics Bar */}
-      <div className="px-8 py-4 border-b bg-background/50 backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
-        <div className="flex items-center gap-6 flex-1">
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-emerald-500/10 rounded-lg">
-              <Terminal className="size-5 text-emerald-500" />
+      <div className="px-3 sm:px-8 py-1.5 sm:py-4 border-b bg-background/50 backdrop-blur-xl flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-6 min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <div className="p-1 sm:p-2 bg-emerald-500/10 rounded-lg">
+              <Terminal className="size-3.5 sm:size-5 text-emerald-500" />
             </div>
-            <h1 className="text-xl font-bold whitespace-nowrap">系统日志 (Logs)</h1>
+            <h1 className="text-xs sm:text-xl font-bold whitespace-nowrap">日志</h1>
           </div>
-          <div className="relative flex-1 max-w-md hidden lg:block">
+          <div className="relative flex-1 max-w-md hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
             <Input 
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
-              placeholder="全量搜索业务流水、错误栈或子系统..." 
-              className="pl-9 h-9 rounded-xl border-border/50 bg-muted/20"
+              placeholder="搜索流水..." 
+              className="pl-9 h-8 sm:h-9 rounded-lg sm:rounded-xl border-border/50 bg-muted/20 text-xs sm:text-sm"
             />
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 border-r pr-4 mr-1 hidden sm:flex">
-            <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">自动追踪</span>
+        <div className="flex items-center gap-1 sm:gap-3">
+          <div className="flex items-center gap-1 border-r pr-1.5 sm:pr-4 mr-0.5 sm:mr-1 shrink-0">
+            <span className="text-[10px] sm:text-xs font-medium text-muted-foreground whitespace-nowrap">追踪</span>
             <Switch 
               checked={autoFollow} 
               onCheckedChange={setAutoFollow} 
-              className="scale-75"
+              className="scale-[0.65] sm:scale-75"
             />
           </div>
-          <Button variant="outline" size="sm" onClick={() => fetchLogs(true)} disabled={loading} className="rounded-xl h-9">
-            <RefreshCw className={cn("size-3.5 mr-2", loading && "animate-spin")} /> 刷新
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleExport} className="rounded-xl h-9">
-            <Download className="size-3.5 mr-2" /> 导出
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => setEntries([])} className="rounded-xl h-9 text-muted-foreground hover:text-destructive">
-            <Trash2 className="size-3.5" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="icon" onClick={() => fetchLogs(true)} disabled={loading} className="h-7 w-7 sm:h-9 sm:w-auto sm:px-3 rounded-lg sm:rounded-xl border-border/50">
+              <RefreshCw className={cn("size-3.5 sm:size-4", loading && "animate-spin")} />
+              <span className="hidden sm:inline ml-2">刷新</span>
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleExport} className="h-7 w-7 sm:h-9 sm:w-auto sm:px-3 rounded-lg sm:rounded-xl border-border/50">
+              <Download className="size-3.5 sm:size-4" />
+              <span className="hidden sm:inline ml-2">导出</span>
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => setEntries([])} className="h-7 w-7 sm:h-9 rounded-lg sm:rounded-xl text-muted-foreground hover:text-destructive">
+              <Trash2 className="size-3.5 sm:size-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Level Filter Bar */}
-      <div className="px-8 py-2 border-b bg-muted/10 flex items-center gap-2 overflow-x-auto whitespace-nowrap shrink-0 scrollbar-hide">
-        <Filter className="size-3.5 text-muted-foreground mr-2 shrink-0" />
+      <div className="px-3 sm:px-8 py-1 sm:py-2 border-b bg-muted/10 flex items-center gap-1.5 sm:gap-2 overflow-x-auto whitespace-nowrap shrink-0 scrollbar-hide">
+        <Filter className="hidden sm:block size-3.5 text-muted-foreground mr-1 shrink-0" />
         {LEVELS.map(level => (
           <button
             key={level}
             onClick={() => toggleLevel(level)}
             className={cn(
-              "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all",
+              "px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border transition-all",
               !excludedLevels.has(level) 
                 ? LEVEL_COLORS[level]
                 : "bg-background text-muted-foreground/30 border-transparent scale-90"
@@ -215,19 +219,19 @@ export default function LogsPage() {
             {level}
           </button>
         ))}
-        <div className="ml-auto flex items-center gap-4 text-[10px] text-muted-foreground font-mono">
+        <div className="ml-auto hidden sm:flex items-center gap-4 text-[10px] text-muted-foreground font-mono">
           <div className="flex items-center gap-1.5"><Activity className="size-3" /> 流速: {entries.length}/2000</div>
           {cursor && <div className="flex items-center gap-1.5"><Database className="size-3" /> 偏移: {cursor.toString(16).toUpperCase()}</div>}
         </div>
       </div>
 
       {/* Main Log Terminal Container */}
-      <div className="flex-1 px-8 pb-8 overflow-hidden bg-muted/10">
+      <div className="flex-1 px-1 sm:px-8 pb-1 sm:pb-8 overflow-hidden bg-muted/10">
         <div 
           ref={scrollRef}
-          className="h-full rounded-2xl border border-white/5 bg-[#0a0a0a] font-mono text-xs leading-relaxed selection:bg-emerald-500/30 overflow-y-auto"
+          className="h-full rounded-lg sm:rounded-2xl border border-white/5 bg-[#0a0a0a] font-mono text-[10px] sm:text-xs leading-relaxed selection:bg-emerald-500/30 overflow-y-auto scrollbar-hide sm:scrollbar-default"
         >
-          <div className="p-6 space-y-0.5 min-h-full pb-20">
+          <div className="p-2 sm:p-6 space-y-0.5 min-h-full pb-20">
             {filteredEntries.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center space-y-4 opacity-20 grayscale py-40">
                 <Activity className="size-12 stroke-1" />
@@ -235,13 +239,13 @@ export default function LogsPage() {
               </div>
             ) : (
               filteredEntries.map((e, idx) => (
-                <div key={idx} className="flex gap-4 group hover:bg-white/5 px-2 -mx-2 transition-colors border-l-2 border-transparent hover:border-emerald-500/50">
-                  <span className="text-zinc-600 shrink-0 select-none w-16 text-right opacity-50 group-hover:opacity-100 transition-opacity">
-                    {e.time ? new Date(e.time).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) : "——"}
+                <div key={idx} className="flex gap-1 sm:gap-4 group hover:bg-white/5 px-1 sm:px-2 -mx-2 transition-colors border-l-2 border-transparent hover:border-emerald-500/50">
+                  <span className="text-zinc-600 shrink-0 select-none w-12 sm:w-16 text-[9px] sm:text-right opacity-50 group-hover:opacity-100 transition-opacity">
+                    {e.time ? new Date(e.time).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) : "--"}
                   </span>
                   
                   <span className={cn(
-                    "shrink-0 px-1 rounded h-fit min-w-[48px] text-center uppercase text-[10px] font-bold mt-0.5",
+                    "shrink-0 px-1 rounded h-fit min-w-[32px] sm:min-w-[48px] text-center uppercase text-[8px] sm:text-[10px] font-bold mt-0.5",
                     e.level ? LEVEL_COLORS[e.level].split(' ')[0] : "text-zinc-500"
                   )}>
                     {e.level || "INFO"}
@@ -287,9 +291,9 @@ export default function LogsPage() {
       {!autoFollow && (
         <button 
           onClick={() => setAutoFollow(true)}
-          className="fixed bottom-12 right-12 bg-emerald-600 text-white p-3 rounded-full shadow-2xl shadow-emerald-600/50 hover:bg-emerald-700 transition-all animate-bounce"
+          className="fixed bottom-4 sm:bottom-12 right-4 sm:right-12 bg-emerald-600 text-white p-2 sm:p-3 rounded-full shadow-2xl shadow-emerald-600/50 hover:bg-emerald-700 transition-all animate-bounce"
         >
-          <ArrowDownCircle className="size-6" />
+          <ArrowDownCircle className="size-5 sm:size-6" />
         </button>
       )}
     </div>

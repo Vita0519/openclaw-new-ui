@@ -106,16 +106,16 @@ function AppContent({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <aside className={cn(
         "border-r border-border/50 bg-background lg:bg-muted/5 flex flex-col h-screen shrink-0 fixed lg:relative z-50 transition-[transform,width] duration-300 ease-in-out lg:translate-x-0 will-change-transform overflow-hidden",
-        mobileSidebarOpen ? "translate-x-0 w-72 shadow-2xl lg:shadow-none" : "-translate-x-full w-72 lg:w-auto",
-        sidebarCollapsed ? "lg:w-20" : "lg:w-72"
+        mobileSidebarOpen ? "translate-x-0 w-60 shadow-2xl lg:shadow-none" : "-translate-x-full w-60 lg:w-auto",
+        sidebarCollapsed ? "lg:w-20" : "lg:w-64"
       )}>
         <div className={cn(
-          "h-16 border-b border-border/50 bg-background/50 backdrop-blur-md flex items-center shrink-0 transition-all duration-300",
-          sidebarCollapsed ? "justify-center p-0" : "justify-between px-6"
+          "h-14 border-b border-border/50 bg-background/50 backdrop-blur-md flex items-center shrink-0 transition-all duration-300",
+          sidebarCollapsed ? "justify-center p-0" : "justify-between px-5"
         )}>
           {!sidebarCollapsed && (
-            <Link href="/dashboard" className="flex items-center gap-3 shrink-0 group">
-              <div className="size-9 p-0.5 rounded-xl bg-background/5 border border-border/40 flex items-center justify-center hover:scale-105 transition-transform duration-300">
+            <Link href="/dashboard" className="flex items-center gap-2.5 shrink-0 group">
+              <div className="size-8 p-0.5 rounded-lg bg-background/5 border border-border/40 flex items-center justify-center hover:scale-105 transition-transform duration-300">
                 <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                   <defs>
                     <linearGradient id="lobster-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -135,8 +135,8 @@ function AppContent({ children }: { children: React.ReactNode }) {
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg leading-tight tracking-tight uppercase">OpenClaw</span>
-                <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium opacity-60">网关控制台</span>
+                <span className="font-bold text-base leading-tight tracking-tight uppercase">OpenClaw</span>
+                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-medium opacity-50">网关控制台</span>
               </div>
             </Link>
           )}
@@ -163,7 +163,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
           )}
         </div>
         
-        <nav className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar overflow-x-hidden">
+        <nav className="flex-1 overflow-y-auto p-3.5 space-y-4 custom-scrollbar overflow-x-hidden">
           <SidebarGroup title="聊天" collapsed={sidebarCollapsed}>
             <SidebarItem icon={<MessageSquare className="size-4" />} label="聊天" href="/chat" active={pathname === "/chat"} collapsed={sidebarCollapsed} />
           </SidebarGroup>
@@ -190,10 +190,10 @@ function AppContent({ children }: { children: React.ReactNode }) {
           </SidebarGroup>
         </nav>
 
-        <div className="p-4 border-t border-border/50">
-          <Button variant="ghost" className={cn("w-full justify-start gap-3 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/5", sidebarCollapsed && "justify-center px-0")} onClick={handleLogout}>
+        <div className="p-3 border-t border-border/50">
+          <Button variant="ghost" className={cn("w-full h-10 justify-start gap-3 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/5", sidebarCollapsed && "justify-center px-0")} onClick={handleLogout}>
             <LogOut className="size-4" />
-            {!sidebarCollapsed && <span className="font-medium">退出登录</span>}
+            {!sidebarCollapsed && <span className="text-sm font-semibold">退出登录</span>}
           </Button>
         </div>
       </aside>
@@ -209,12 +209,12 @@ function AppContent({ children }: { children: React.ReactNode }) {
              <Button variant="ghost" size="icon" onClick={() => setMobileSidebarOpen(true)} className="rounded-xl hover:bg-muted shrink-0 lg:hidden">
                <PanelLeft className="size-4 text-muted-foreground" />
              </Button>
-             <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-muted/50 rounded-full text-[9px] sm:text-[11px] font-medium border border-border/50">
+             <div className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-3 py-1 bg-muted/50 rounded-full text-[9px] sm:text-[11px] font-medium border border-border/50">
                <span className={cn("size-1.5 sm:size-2 rounded-full shrink-0", connected ? "bg-green-500" : "bg-red-500 animate-pulse")} />
-               <span className="hidden sm:inline">版本</span> {snapshot?.server?.version || "2026.3.11"}
+               <span className="hidden sm:inline">版本 {snapshot?.server?.version || "2026.3.11"}</span>
              </div>
              <div className={cn(
-               "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[11px] font-medium border shrink-0",
+               "flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[11px] font-medium border shrink-0",
                connected ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-red-500/10 text-red-500 border-red-500/20"
              )}>
                <span className="hidden sm:inline">健康状况: </span>{connected ? "在线" : "离线"}
@@ -338,7 +338,7 @@ function SidebarGroup({ title, children, collapsed = false }: { title: string, c
 function SidebarItem({ icon, label, href, active = false, collapsed = false }: { icon: React.ReactNode, label: string, href: string, active?: boolean, collapsed?: boolean }) {
   return (
     <Link href={href} className={cn(
-      "group flex items-center px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200",
+      "group flex items-center px-3 py-2 rounded-lg cursor-pointer transition-all duration-200",
       active ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "hover:bg-primary/5 text-muted-foreground hover:text-primary",
       collapsed ? "justify-center" : "justify-between"
     )}>

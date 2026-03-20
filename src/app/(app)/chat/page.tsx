@@ -526,15 +526,15 @@ export default function ChatPage() {
   return (
     <div className="flex h-full bg-muted/5 overflow-hidden">
         {mounted && document.getElementById('header-context-monitor-portal') && createPortal(
-            <div className="shrink-0 flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-muted/50 border border-border/50 text-[9px] sm:text-[11px] font-medium tracking-widest text-muted-foreground/80 shadow-sm cursor-help hover:bg-muted/80 transition-all font-mono" title="当前上下文窗口状态">
+            <div className="shrink-0 flex items-center gap-1 sm:gap-2 px-1.5 sm:px-3 py-1 rounded-full bg-muted/20 border border-border/50 text-[9px] sm:text-[11px] font-medium tracking-widest text-muted-foreground/80 shadow-sm transition-all font-mono" title="当前上下文窗口状态">
                 <div className={cn(
-                    "size-1.5 sm:size-2 rounded-full animate-pulse shadow-[0_0_8px_rgba(0,0,0,0.1)] shrink-0",
+                    "size-1.5 rounded-full animate-pulse shrink-0",
                     ((activeSessionData?.totalTokens || health?.contextWeight || sessionUsage?.input || 0) / ((activeSessionData?.contextTokens || activeModelData?.contextWindow || config?.agents?.defaults?.contextTokens || health?.contextLimit || 128000) || 1)) > 0.8 ? "bg-red-500" : 
                     ((activeSessionData?.totalTokens || health?.contextWeight || sessionUsage?.input || 0) / ((activeSessionData?.contextTokens || activeModelData?.contextWindow || config?.agents?.defaults?.contextTokens || health?.contextLimit || 128000) || 1)) > 0.5 ? "bg-yellow-500" : "bg-emerald-500"
                 )} />
                 <span className="font-bold">{formatContext(activeSessionData?.totalTokens || health?.contextWeight || sessionUsage?.input || 0)}</span>
                 <span className="opacity-30 text-[8px] sm:text-[10px]">/</span>
-                <span className="opacity-50 font-bold">{formatContext(activeSessionData?.contextTokens || activeModelData?.contextWindow || config?.agents?.defaults?.contextTokens || health?.contextLimit || 128000)}</span>
+                <span className="opacity-40 font-bold text-[9px] sm:text-[11px]">{formatContext(activeSessionData?.contextTokens || activeModelData?.contextWindow || config?.agents?.defaults?.contextTokens || health?.contextLimit || 128000)}</span>
             </div>,
             document.getElementById('header-context-monitor-portal')!
         )}
@@ -616,11 +616,11 @@ export default function ChatPage() {
                                 <DropdownMenuTrigger asChild>
                                     <Button 
                                         variant="outline" size="sm"
-                                        className="h-7 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all px-2 sm:px-4 shrink-0 focus-visible:ring-0"
+                                        className="h-6 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[8px] sm:text-[10px] font-black uppercase tracking-wider text-muted-foreground hover:text-foreground transition-all px-1.5 sm:px-4 shrink-0 focus-visible:ring-0"
                                     >
-                                        <MessagesSquare className="size-3 lg:size-3.5 mr-1 sm:mr-1.5 opacity-50 shrink-0" />
-                                        <span className="max-w-[48px] sm:max-w-[120px] truncate">{activeSessionData.displayName || activeSessionData.label || activeSession}</span>
-                                        <ChevronDown className={cn("size-3 ml-1 sm:ml-1.5 opacity-30 shrink-0 transition-transform", showSessionMenu && "rotate-180")} />
+                                        <MessagesSquare className="size-2.5 sm:size-3.5 mr-1 sm:mr-1.5 opacity-50 shrink-0" />
+                                        <span className="max-w-[40px] sm:max-w-[120px] truncate">{activeSessionData.displayName || activeSessionData.label || activeSession}</span>
+                                        <ChevronDown className={cn("size-2.5 ml-1 sm:ml-1.5 opacity-30 shrink-0 transition-transform", showSessionMenu && "rotate-180")} />
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" side="top" sideOffset={12} className="w-72 p-2 border-border/50 bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-2 duration-200">
@@ -684,17 +684,28 @@ export default function ChatPage() {
                                 <DropdownMenuTrigger asChild>
                                     <Button 
                                         variant="outline" size="sm" 
-                                        className="h-7 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 sm:px-4 hover:text-foreground transition-all shrink-0 focus-visible:ring-0"
+                                        className="h-6 sm:h-8 rounded-full bg-background/80 backdrop-blur-sm border-border/50 text-[8px] sm:text-[10px] font-black uppercase tracking-wider px-1.5 sm:px-4 hover:text-foreground transition-all shrink-0 focus-visible:ring-0"
                                     >
-                                        <Brain className="size-3 lg:size-3.5 mr-1 sm:mr-1.5 opacity-50 shrink-0" />
-                                        <span className="max-w-[60px] sm:max-w-[160px] truncate">{selectedModel || "Default"}</span> 
-                                        <ChevronDown className="size-3 ml-1 sm:ml-1.5 opacity-30 shrink-0" />
+                                        <Brain className="size-2.5 sm:size-3.5 mr-1 sm:mr-1.5 opacity-50 shrink-0" />
+                                        <span className="max-w-[50px] sm:max-w-[160px] truncate">{selectedModel || "Default"}</span> 
+                                        <ChevronDown className="size-2.5 ml-1 sm:ml-1.5 opacity-30 shrink-0" />
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start" side="top" sideOffset={12} className="w-64 p-2 border-border/50 bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-2 duration-200">
+                                <DropdownMenuContent align="start" side="top" sideOffset={12} className="w-72 p-2 border-border/50 bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-2 duration-200">
                                     <div className="p-2.5 border-b border-border/40 text-[9px] font-black uppercase opacity-40 tracking-widest pl-3 flex items-center gap-2 mb-1">
                                         <Monitor className="size-3" /> 模型列表
                                     </div>
+                                    {selectedModel && (
+                                        <div className="px-3 py-2.5 mb-1.5 mx-1 bg-primary/5 border border-primary/20 rounded-xl animate-in fade-in zoom-in-95 duration-300">
+                                            <span className="text-[8px] font-black opacity-30 uppercase tracking-widest block mb-1">当前正在使用 (Active)</span>
+                                            <div className="flex items-center gap-2">
+                                                <div className="size-1.5 rounded-full bg-primary animate-pulse" />
+                                                <span className="text-[11px] font-bold text-primary break-all leading-normal">
+                                                    {activeModelData?.name || selectedModel}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className="max-h-60 overflow-y-auto p-1 py-1.5 custom-scrollbar">
                                         {(() => {
                                           // Group models by provider
@@ -729,9 +740,10 @@ export default function ChatPage() {
                                                     style={selectedModel === m.id ? { backgroundColor: `${color}15`, borderColor: `${color}30` } : {}}
                                                   >
                                                     <div className="size-2 rounded-full mt-1.5" style={{ backgroundColor: color, opacity: 0.6 }} />
-                                                    <div className="flex flex-col min-w-0">
+                                                    <div className="flex-1 min-w-0 pr-2">
                                                       <p className="text-[11px] font-bold truncate" style={selectedModel === m.id ? { color } : {}}>{m.name || m.id}</p>
                                                     </div>
+                                                    {selectedModel === m.id && <Check className="size-3 mt-1" style={{ color }} />}
                                                   </DropdownMenuItem>
                                                 ))}
                                               </div>
@@ -743,8 +755,8 @@ export default function ChatPage() {
                             </DropdownMenu>
                         </div>
                         
-                        <Button variant="outline" size="sm" onClick={() => setIsCommandsOpen(true)} className="size-7 sm:size-8 rounded-full border-border/50 p-0 shadow-sm bg-background/80 backdrop-blur-sm hover:scale-105 transition-all shrink-0"><SquareTerminal className="size-3.5 text-orange-500" /></Button>
-                        <Button variant="outline" size="sm" onClick={() => setIsUsageOpen(true)} className="size-7 sm:size-8 rounded-full border-border/50 p-0 shadow-sm bg-background/80 backdrop-blur-sm hover:scale-105 transition-all shrink-0"><BarChart2 className="size-3.5 text-green-500" /></Button>
+                        <Button variant="outline" size="sm" onClick={() => setIsCommandsOpen(true)} className="size-6 sm:size-8 rounded-full border-border/50 p-0 shadow-sm bg-background/80 backdrop-blur-sm hover:scale-105 transition-all shrink-0"><SquareTerminal className="size-3 lg:size-3.5 text-orange-500" /></Button>
+                        <Button variant="outline" size="sm" onClick={() => setIsUsageOpen(true)} className="size-6 sm:size-8 rounded-full border-border/50 p-0 shadow-sm bg-background/80 backdrop-blur-sm hover:scale-105 transition-all shrink-0"><BarChart2 className="size-3 lg:size-3.5 text-green-500" /></Button>
                         
                         <div className="w-px h-4 bg-border/50 mx-1 shrink-0" />
                         
@@ -752,11 +764,11 @@ export default function ChatPage() {
                             variant="outline" size="sm" 
                             onClick={toggleDetails} 
                             className={cn(
-                                "size-7 sm:size-8 rounded-full border-border/50 p-0 shadow-sm backdrop-blur-sm hover:scale-105 transition-all shrink-0",
+                                "size-6 sm:size-8 rounded-full border-border/50 p-0 shadow-sm backdrop-blur-sm hover:scale-105 transition-all shrink-0",
                                 showDetails ? "bg-amber-500/10 border-amber-500/20 text-amber-500" : "bg-background/80 text-muted-foreground/40 grayscale"
                             )}
                         >
-                            <Zap className="size-3.5" />
+                            <Zap className="size-3 lg:size-3.5" />
                         </Button>
 
                         {/* Context monitor deeply moved to React Portal */}

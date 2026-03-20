@@ -30,8 +30,8 @@ export default function OverviewPage() {
   const nodeCount = presence.length;
 
   return (
-    <main className="p-8 space-y-8 bg-muted/5 min-h-full">
-      <div className="max-w-7xl mx-auto space-y-10 pb-12">
+    <main className="p-4 sm:p-8 space-y-6 sm:space-y-8 bg-muted/5 min-h-full">
+      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-10 pb-8 sm:pb-12">
         {/* Error Display */}
         {error && (
           <div className="bg-destructive/10 border border-destructive/20 p-6 rounded-3xl flex items-center gap-4 text-destructive animate-in slide-in-from-top-4 duration-500">
@@ -45,21 +45,21 @@ export default function OverviewPage() {
 
         {/* Header Section */}
         <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-bold tracking-tight">状态概览</h1>
-            <p className="text-muted-foreground">底层运行指标与安全连接快照。</p>
+          <div className="flex flex-col gap-0.5 sm:gap-1">
+            <h1 className="text-xl sm:text-3xl font-bold tracking-tight">状态概览</h1>
+            <p className="text-[10px] sm:text-sm text-muted-foreground">底层运行指标与安全连接快照。</p>
           </div>
           <div className={cn(
-            "flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold transition-all",
+            "flex items-center gap-1.5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border text-[9px] sm:text-xs font-bold transition-all shrink-0",
             connected ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-orange-500/10 text-orange-500 border-orange-500/20"
           )}>
-            <div className={cn("size-2 rounded-full", connected ? "bg-green-500" : "bg-orange-500 animate-pulse")} />
-            WebSocket {connected ? "已连接" : "未连接"}
+            <div className={cn("size-1.5 sm:size-2 rounded-full", connected ? "bg-green-500" : "bg-orange-500 animate-pulse")} />
+            <span className="hidden xs:inline">WebSocket</span> {connected ? "已连接" : "未连接"}
           </div>
         </div>
 
         {/* Top Metric Cards - Based on Screenshot */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           <MetricCard 
             icon={<Zap className="size-5 text-yellow-500" />} 
             label="系统资源" 
@@ -106,30 +106,30 @@ export default function OverviewPage() {
         </div>
 
         {/* System Logs / Extra Modules (Optional placeholders) */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             <Card className="lg:col-span-2 border-border/50 shadow-sm bg-background">
-                 <CardHeader className="p-6 border-b border-border/30 bg-muted/5 flex flex-row items-center justify-between">
+                 <CardHeader className="p-4 sm:p-6 border-b border-border/30 bg-muted/5 flex flex-row items-center justify-between">
                     <div>
-                        <CardTitle className="text-base">实例心跳记录</CardTitle>
-                        <CardDescription>最近十分钟内的节点活跃状态</CardDescription>
+                        <CardTitle className="text-sm sm:text-base">实例心跳记录</CardTitle>
+                        <CardDescription className="text-[10px] sm:text-xs">最近十分钟内的节点活跃状态</CardDescription>
                     </div>
-                    <Database className="size-5 text-muted-foreground/40" />
+                    <Database className="size-4 sm:size-5 text-muted-foreground/40" />
                  </CardHeader>
                  <CardContent className="p-0 overflow-auto max-h-72">
-                    <table className="w-full text-sm text-left">
-                        <thead className="bg-muted/30 text-xs font-bold text-muted-foreground uppercase">
+                    <table className="w-full text-xs sm:text-sm text-left">
+                        <thead className="bg-muted/30 text-[9px] sm:text-xs font-bold text-muted-foreground uppercase">
                             <tr>
-                                <th className="px-6 py-4">时间</th>
-                                <th className="px-6 py-4">实例</th>
-                                <th className="px-6 py-4">状态</th>
+                                <th className="px-3 sm:px-6 py-3 sm:py-4">时间</th>
+                                <th className="px-3 sm:px-6 py-3 sm:py-4">实例</th>
+                                <th className="px-3 sm:px-6 py-3 sm:py-4">状态</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
                             {presence.map((p, i) => (
                                 <tr key={i} className="hover:bg-muted/20">
-                                    <td className="px-6 py-4 font-mono text-xs text-muted-foreground italic">刚刚</td>
-                                    <td className="px-6 py-4 font-semibold">{p.client?.name || p.id}</td>
-                                    <td className="px-6 py-4 text-green-500">Success</td>
+                                    <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-[9px] sm:text-xs text-muted-foreground italic truncate max-w-[60px] sm:max-w-none">刚刚</td>
+                                    <td className="px-3 sm:px-6 py-3 sm:py-4 font-semibold truncate max-w-[100px] sm:max-w-none">{p.client?.name || p.id}</td>
+                                    <td className="px-3 sm:px-6 py-3 sm:py-4 text-green-500 font-bold">Success</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -138,22 +138,22 @@ export default function OverviewPage() {
             </Card>
 
             <Card className="border-border/50 shadow-sm bg-background overflow-hidden flex flex-col">
-                <CardHeader className="p-6 border-b border-border/30 bg-muted/5">
-                    <CardTitle className="text-base">快速操作</CardTitle>
+                <CardHeader className="p-4 sm:p-6 border-b border-border/30 bg-muted/5">
+                    <CardTitle className="text-sm sm:text-base">快速操作</CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                    <Button variant="outline" className="w-full justify-start rounded-xl py-6 gap-3">
-                        <Activity className="size-4 text-primary" />
+                <CardContent className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <Button variant="outline" className="w-full justify-start rounded-lg sm:rounded-xl py-4 sm:py-6 gap-2.5 sm:gap-3">
+                        <Activity className="size-3.5 sm:size-4 text-primary" />
                         <div className="text-left">
-                            <div className="text-sm font-bold">同步会话快照</div>
-                            <div className="text-[10px] text-muted-foreground">拉取当前最新的会话状态</div>
+                            <div className="text-[12px] sm:text-sm font-bold">同步会话快照</div>
+                            <div className="text-[9px] sm:text-[10px] text-muted-foreground">拉取当前最新的会话状态</div>
                         </div>
                     </Button>
-                    <Button variant="outline" className="w-full justify-start rounded-xl py-6 gap-3">
-                        <Monitor className="size-4 text-primary" />
+                    <Button variant="outline" className="w-full justify-start rounded-lg sm:rounded-xl py-4 sm:py-6 gap-2.5 sm:gap-3">
+                        <Monitor className="size-3.5 sm:size-4 text-primary" />
                         <div className="text-left">
-                            <div className="text-sm font-bold">切换节点模式</div>
-                            <div className="text-[10px] text-muted-foreground">更改全局节点的分配逻辑</div>
+                            <div className="text-[12px] sm:text-sm font-bold">切换节点模式</div>
+                            <div className="text-[9px] sm:text-[10px] text-muted-foreground">更改全局节点的分配逻辑</div>
                         </div>
                     </Button>
                 </CardContent>
@@ -166,15 +166,16 @@ export default function OverviewPage() {
 
 function MetricCard({ icon, label, value, sub }: { icon: any, label: string, value: string, sub: string }) {
   return (
-    <Card className="border-border/50 shadow-sm hover:border-primary/20 transition-all bg-background group">
-      <CardContent className="p-6 flex items-start gap-4">
-        <div className="size-12 rounded-2xl bg-muted/50 flex items-center justify-center border border-border/50 transition-colors group-hover:bg-primary/5 group-hover:border-primary/20">
-            {icon}
+    <Card className="border-border/50 shadow-sm hover:border-primary/20 transition-all bg-background group overflow-hidden">
+      <CardContent className="p-3 sm:p-6 flex items-start sm:items-center gap-2.5 sm:gap-4">
+        <div className="size-8 sm:size-12 rounded-lg sm:rounded-2xl bg-muted/50 flex items-center justify-center border border-border/50 transition-colors group-hover:bg-primary/5 group-hover:border-primary/20 shrink-0">
+            {/* Clone icon to adjust size */}
+            {typeof icon === 'object' ? { ...icon, props: { ...icon.props, className: cn(icon.props.className, "size-4 sm:size-5") } } : icon}
         </div>
-        <div className="flex-1 space-y-1">
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{label}</span>
-            <div className="text-2xl font-bold tracking-tight">{value}</div>
-            <p className="text-[11px] text-muted-foreground leading-relaxed">{sub}</p>
+        <div className="flex-1 space-y-0 sm:space-y-1 min-w-0">
+            <span className="text-[9px] sm:text-xs font-bold text-muted-foreground uppercase tracking-widest block truncate">{label}</span>
+            <div className="text-base sm:text-2xl font-bold tracking-tight truncate">{value}</div>
+            <p className="text-[8px] sm:text-[11px] text-muted-foreground leading-tight sm:leading-relaxed truncate">{sub}</p>
         </div>
       </CardContent>
     </Card>
@@ -184,15 +185,15 @@ function MetricCard({ icon, label, value, sub }: { icon: any, label: string, val
 function DetailRow({ icon, label, value, isMono = false, isLast = false }: { icon: any, label: string, value: string, isMono?: boolean, isLast?: boolean }) {
     return (
         <div className={cn(
-            "px-8 py-5 flex items-center justify-between hover:bg-muted/5 transition-colors",
+            "px-4 sm:px-8 py-3.5 sm:py-5 flex items-center justify-between hover:bg-muted/5 transition-colors",
             !isLast && "border-b border-border/30"
         )}>
-            <div className="flex items-center gap-4 text-muted-foreground">
-                <span className="opacity-40">{icon}</span>
-                <span className="text-sm font-semibold">{label}</span>
+            <div className="flex items-center gap-3 sm:gap-4 text-muted-foreground">
+                <span className="opacity-40 [&>svg]:size-3.5 sm:[&>svg]:size-5">{icon}</span>
+                <span className="text-xs sm:text-sm font-semibold">{label}</span>
             </div>
             <div className={cn(
-                "px-3 py-1 bg-muted/40 rounded-lg text-[11px] font-bold border border-border/50",
+                "px-2 sm:px-3 py-1 bg-muted/40 rounded-lg text-[9px] sm:text-[11px] font-bold border border-border/50 truncate max-w-[120px] sm:max-w-none text-right",
                 isMono ? "font-mono" : ""
             )}>
                 {value}
