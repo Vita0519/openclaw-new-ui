@@ -263,6 +263,8 @@ export default function ChatPage() {
   }, [showModelMenu, connected, client]);
 
   const [activeTools, setActiveTools] = useState<Record<string, any[]>>({});
+  const activeToolsRef = useRef<Record<string, any[]>>({});
+  const streamingMessageRef = useRef<any>(null);
   const lastRunId = useRef<string | null>(null);
 
   useEffect(() => {
@@ -278,28 +280,83 @@ export default function ChatPage() {
 
         if (state === "delta") {
           setIsTyping(true);
-          setStreamingMessage({ ...message, runId });
+          const newStreamMsg = { ...message, runId };
+          setStreamingMessage(newStreamMsg);
+          streamingMessageRef.current = newStreamMsg;
           lastRunId.current = runId;
         } else if (state === "final" || state === "after-final" || state === "aborted") {
-          if (message && (message.content || message.text)) {
-            setMessages(prev => {
-              const existingIdx = prev.findIndex(m => m.id === message.id);
-              if (existingIdx >= 0) {
-                const next = [...prev];
-                next[existingIdx] = { ...next[existingIdx], ...message };
-                return next;
-              }
-              return [...prev, message];
-            });
+          const runIdFromPayload = runId || lastRunId.current;
+          const tools = runIdFromPayload ? (activeToolsRef.current[runIdFromPayload] || []) : [];
+          const textMsg = message?.text || (typeof message?.content === 'string' ? message.content : (message?.content?.[0]?.text || ""));
+          const streamMsgText = streamingMessageRef.current?.text || (typeof streamingMessageRef.current?.content === 'string' ? streamingMessageRef.current.content : (streamingMessageRef.current?.content?.[0]?.text || ""));
+          const finalText = textMsg || streamMsgText || "";
+
+          if (finalText || tools.length > 0) {
+             const stableId = runIdFromPayload || message?.id || 'current-ai-response';
+             const finalMessage = {
+                id: stableId,
+                role: "assistant",
+                ...(streamingMessageRef.current || {}),
+                ...(message || {}), 
+                content: [{ type: 'text', text: finalText }, ...tools],
+             };
+
+             setMessages(prev => {
+                const existingIdx = prev.findIndex(m => m.id === finalMessage.id);
+                if (existingIdx >= 0) {
+                  const next = [...prev];
+                  next[existingIdx] = { ...next[existingIdx], ...finalMessage };
+                  return next;
+                }
+                return [...prev, finalMessage];
+             });
           }
+          
           setStreamingMessage(null);
+          streamingMessageRef.current = null;
           setIsTyping(false);
-          setActiveTools(prev => { const next = { ...prev }; delete next[runId || ""]; return next; });
+          setActiveTools(prev => { 
+            const next = { ...prev }; 
+            delete next[runIdFromPayload || ""]; 
+            activeToolsRef.current = next;
+            return next; 
+          });
+          if (runIdFromPayload) {
+             delete activeToolsRef.current[runIdFromPayload];
+          }
           fetchSessions();
           setTimeout(() => fetchHistory(activeSession), 1200);
         } else if (state === "error") {
           setIsTyping(false);
-          toast({ title: "对话错误", description: errorMessage || "网关处理消息时遇到错误", variant: "destructive" });
+          toast({ title: "对话错误", description: errorMessage || "发生未知错误", variant: "destructive" });
+        }
+      }
+      // 2. 监听原始 Agent 事件以捕捉流式工具
+      else if (evt.event === "agent") {
+        const { runId, stream, data } = evt.payload;
+        if (stream === "tool" && data) {
+          setActiveTools(prev => {
+            const currentParts = prev[runId] || [];
+            const { phase, toolCallId } = data;
+            const updatedParts = [...currentParts];
+
+            if (phase === "start") {
+              const argStr = typeof data.args === 'string' ? data.args : JSON.stringify(data.args || {});
+              updatedParts.push({ type: "tool_use", id: toolCallId, name: data.name, arguments: argStr });
+            } else if (phase === "update" && data.partialResult) {
+              const res = updatedParts.find(p => p.type === "tool_result" && p.tool_call_id === toolCallId);
+              if (res) res.content = String(data.partialResult);
+              else updatedParts.push({ type: "tool_result", tool_call_id: toolCallId, content: String(data.partialResult), is_partial: true });
+            } else if (phase === "result") {
+              const idx = updatedParts.findIndex(p => p.type === "tool_result" && p.tool_call_id === toolCallId);
+              const resultStr = typeof data.result === 'string' ? data.result : JSON.stringify(data.result || {});
+              if (idx >= 0) updatedParts[idx] = { type: "tool_result", tool_call_id: toolCallId, content: resultStr };
+              else updatedParts.push({ type: "tool_result", tool_call_id: toolCallId, content: resultStr });
+            }
+            const next = { ...prev, [runId]: updatedParts };
+            activeToolsRef.current = next;
+            return next;
+          });
         }
       }
     };
